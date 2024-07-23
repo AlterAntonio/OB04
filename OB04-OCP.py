@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod
 
+#Создаём абстрактный класс оружия
 class Weapon(ABC):
     @abstractmethod
     def attack(self):
         pass
 
+#Определяем 3 класса оружия
 class Sword(Weapon):
     def __init__(self):
         self.ammo = True
@@ -66,6 +68,7 @@ class Rifle(Weapon):
     def __str__(self): return (f'{self.name}, урон: {self.damage}, дальность поражения: {self.range}, патронов в '
                                f'обойме: {self.ammo}')
 
+#Определяем класс бойца
 class Fighter:
     def __init__(self, *args: Weapon, health=50):
         self.health = health
@@ -99,6 +102,7 @@ class Fighter:
                 print(f'У бойца в руках {self.using_weapon}')
 
 
+#Определяем класс монстра
 class Monster:
     def __init__(self, health=100, damage=8, distance=25):
         self.health = health
@@ -110,7 +114,7 @@ class Monster:
         if self.distance == 1: fighter.take_damage(self.damage)
         else:
             self.distance -= 1
-            print(f'Монстр приближается! Дистанция - {self.distance}')
+            print(f'Дистанция до монстра - {self.distance}')
 
     def take_damage(self, damage):
         self.health -= damage
@@ -119,10 +123,11 @@ class Monster:
         else:
             print(f'Монстр убит')
 
-
+#Создаём объекты классов боец и монстр
 fighter = Fighter(Sword(), Bow(), Rifle())
-monster = Monster(health=100, distance=21)
+monster = Monster()
 
+#Цикл для удобства тестирования боя
 while fighter.health > 0 and monster.health > 0:
     print('Ситуация развивается стремительно, надо действовать!')
     print(f'1 - атаковать монстра выбранным оружием: {fighter.using_weapon.name}\n2 - поменять оружие\n3 - '
@@ -131,12 +136,15 @@ while fighter.health > 0 and monster.health > 0:
     match user_choice:
         case '1':
             fighter.using_weapon.attack(monster)
+            print('Монстр приближается!')
             monster.attack(fighter)
         case '2':
             fighter.changeWeapon()
+            print('Монстр приближается!')
             monster.attack(fighter)
         case '3':
             fighter.move(monster)
+            print('Монстр приближается!')
             monster.attack(fighter)
 
 
