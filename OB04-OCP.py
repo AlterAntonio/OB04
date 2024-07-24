@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import random
 
 #Создаём абстрактный класс оружия
 class Weapon(ABC):
@@ -73,7 +74,7 @@ class Fighter:
     def __init__(self, *args: Weapon, health=50):
         self.health = health
         self.arsenal = args
-        self.using_weapon = args[0]
+        self.using_weapon = random.choice(args)
         print(f'У бойца в руках {self.using_weapon}')
 
     def move(self, monster):
@@ -107,11 +108,14 @@ class Monster:
     def __init__(self, health=100, damage=8, distance=25):
         self.health = health
         self.damage = damage
-        self.distance = distance
+        self.distance = abs(distance)
         print(f'Монстр приближается! Дистанция - {self.distance}')
 
     def attack(self, fighter):
         if self.distance == 1: fighter.take_damage(self.damage)
+        elif self.distance == 0:
+            self.distance += 1
+            print(f'Дистанция до монстра - {self.distance}')
         else:
             self.distance -= 1
             print(f'Дистанция до монстра - {self.distance}')
